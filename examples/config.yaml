@@ -1,0 +1,46 @@
+openshift:
+
+  credentials:
+
+    ## Allows Keycloak User Autoregistration
+    registrationAllowed: true
+
+    ## CLUSTER LOGIN FOR CONFIGURATION
+    admin:
+      username: kubeadmin
+      password: password
+
+    ## Creates Initial Users & Binds them to a group in Keycloak
+    users:
+      - username: "admin"
+        password: "password"
+        group: "cluster-admins"
+
+    # Will Adjust Later for OIDC
+    # But currently need a fast solution
+    vault:
+      token: "vaultcredential"
+
+  clusters:
+
+    - name: cluster-name
+      type: rosa # local, hcp, rosa, aro, ocp
+      # version: 4.16.30
+      create: false
+      domain: set-me
+      compute:
+        workers: 6
+      providerCredentials:
+        aws_access_key_id: ""
+        aws_secret_access_key: ""
+        region: "us-east-2"
+        rosa_token: ""
+      workshop:
+        chart:
+          enabled: true
+          name: orchestrator
+          version: 0.0.79
+          repo: https://poc-examples.github.io/charts
+          settings:
+            role: workload
+            stage: shared
